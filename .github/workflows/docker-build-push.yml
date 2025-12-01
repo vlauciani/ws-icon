@@ -24,6 +24,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check version consistency
+        run: |
+          # Read version from version file
+          VERSION_FILE=$(cat version | tr -d '[:space:]')
+          echo "Version from version file: $VERSION_FILE"
+
+          # Read version from OpenAPI spec
+          VERSION_OPENAPI=$(grep -E '^\s*version:' swagger/openapi.yaml | head -n 1 | sed 's/.*version:[[:space:]]*//g' | tr -d '[:space:]')
+          echo "Version from OpenAPI spec: $VERSION_OPENAPI"
+
+          # Compare versions
+          if [ "$VERSION_FILE" != "$VERSION_OPENAPI" ]; then
+            echo "::error::Version mismatch! version file: $VERSION_FILE, openapi.yaml: $VERSION_OPENAPI"
+            exit 1
+          fi
+
+          echo "::notice::Version check passed: $VERSION_FILE"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
