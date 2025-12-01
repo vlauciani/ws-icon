@@ -1,0 +1,823 @@
+openapi: 3.0.3
+info:
+  title: INGV Icon Generation API
+  description: |
+    Dynamic icon generation service that creates PNG icons with customizable colors, labels, and borders.
+
+    ## Features
+    - **Six icon types**: Square, Circle, Triangle, Pentagon, Hexagon, Star
+    - **RESTful endpoints**: Direct access to each icon type
+    - **Automatic caching**: Generated icons are cached to improve performance
+    - **CORS enabled**: Cross-origin requests are supported
+    - **Backward compatible**: Legacy `icon.php` and deprecated endpoints still work
+
+    ## Migration Guide
+    **New (Preferred)**:
+    - `/square.php?label=ST&...` - Square icons
+    - `/circle.php?xsize=60&...` - Circle icons
+    - `/triangle.php?label=T1&...` - Triangle icons
+    - `/pentagon.php?label=P1&...` - Pentagon icons
+    - `/hexagon.php?label=H1&...` - Hexagon icons
+    - `/star.php?label=S1&...` - Star icons (5-pointed)
+
+    **Deprecated (Backward Compatible)**:
+    - `/icon.php?type=square&...` - Redirects to square.php
+    - `/sta2.php?...` - HTTP 301 redirect to square.php
+    - `/event1.php?...` - HTTP 301 redirect to circle.php
+
+    ## Response Headers
+    All successful icon responses include:
+    - `X-Cache-Status`: `HIT` or `MISS` indicating cache usage
+    - `X-Icon-Type`: The canonical type name
+    - `ETag`: MD5 hash for caching validation
+    - `Cache-Control`: Aggressive caching (1 year immutable)
+  version: 2.0.0
+  contact:
+    name: INGV Support
+    email: valentino.lauciani@ingv.it
+
+servers:
+  - url: http://localhost:8999
+    description: Local development server
+  - url: http://webservices.ingv.it/icon
+    description: Production server (example)
+
+tags:
+  - name: icons
+    description: Icon generation endpoints
+  - name: deprecated
+    description: Deprecated endpoints (backward compatibility)
+  - name: monitoring
+    description: Health and monitoring endpoints
+
+paths:
+  /square.php:
+    get:
+      operationId: generateSquareIcon
+      summary: Generate a square icon
+      description: Generates a square icon with customizable background color, label, label color, and border (database status) color.
+      tags:
+        - icons
+      parameters:
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "ST"
+        - name: labelcolor
+          in: query
+          required: true
+          description: Hex color code for label text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFFFFF"
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FF0000"
+        - name: dbstatuscolor
+          in: query
+          required: true
+          description: Hex color code for border (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "00FF00"
+        - name: bordersize
+          in: query
+          required: false
+          description: Border thickness in pixels (0-10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          example: 3
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 10
+      responses:
+        '200':
+          description: Square icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: square
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /circle.php:
+    get:
+      operationId: generateCircleIcon
+      summary: Generate a circle icon
+      description: Generates a circular icon with customizable radius, background color, label, and text color.
+      tags:
+        - icons
+      parameters:
+        - name: xsize
+          in: query
+          required: true
+          description: Horizontal radius in pixels (10-500)
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 500
+          example: 60
+        - name: ysize
+          in: query
+          required: true
+          description: Vertical radius in pixels (10-500)
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 500
+          example: 60
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "0000FF"
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "C1"
+        - name: textcolor
+          in: query
+          required: true
+          description: Hex color code for text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFFFFF"
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 10
+      responses:
+        '200':
+          description: Circle icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: circle
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /triangle.php:
+    get:
+      operationId: generateTriangleIcon
+      summary: Generate a triangle icon
+      description: Generates a triangular icon with customizable background color, label, label color, border color, and font size.
+      tags:
+        - icons
+      parameters:
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FF0000"
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "T1"
+        - name: labelcolor
+          in: query
+          required: true
+          description: Hex color code for label text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFFFFF"
+        - name: bordercolor
+          in: query
+          required: true
+          description: Hex color code for border (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "000000"
+        - name: bordersize
+          in: query
+          required: false
+          description: Border thickness in pixels (0-10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          example: 3
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 12
+      responses:
+        '200':
+          description: Triangle icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: triangle
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pentagon.php:
+    get:
+      operationId: generatePentagonIcon
+      summary: Generate a pentagon icon
+      description: Generates a pentagonal icon with customizable background color, label, label color, border color, and font size.
+      tags:
+        - icons
+      parameters:
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFA500"
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "P1"
+        - name: labelcolor
+          in: query
+          required: true
+          description: Hex color code for label text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFFFFF"
+        - name: bordercolor
+          in: query
+          required: true
+          description: Hex color code for border (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "000000"
+        - name: bordersize
+          in: query
+          required: false
+          description: Border thickness in pixels (0-10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          example: 3
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 12
+      responses:
+        '200':
+          description: Pentagon icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: pentagon
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /hexagon.php:
+    get:
+      operationId: generateHexagonIcon
+      summary: Generate a hexagon icon
+      description: Generates a hexagonal icon with customizable background color, label, label color, border color, and font size.
+      tags:
+        - icons
+      parameters:
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "800080"
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "H1"
+        - name: labelcolor
+          in: query
+          required: true
+          description: Hex color code for label text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFFFFF"
+        - name: bordercolor
+          in: query
+          required: true
+          description: Hex color code for border (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "000000"
+        - name: bordersize
+          in: query
+          required: false
+          description: Border thickness in pixels (0-10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          example: 3
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 12
+      responses:
+        '200':
+          description: Hexagon icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: hexagon
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /star.php:
+    get:
+      operationId: generateStarIcon
+      summary: Generate a star icon
+      description: Generates a 5-pointed star icon with customizable background color, label, label color, border color, and font size.
+      tags:
+        - icons
+      parameters:
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FFD700"
+        - name: label
+          in: query
+          required: true
+          description: Text label to display (1-10 characters)
+          schema:
+            type: string
+            maxLength: 10
+          example: "S1"
+        - name: labelcolor
+          in: query
+          required: true
+          description: Hex color code for label text (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "000000"
+        - name: bordercolor
+          in: query
+          required: true
+          description: Hex color code for border (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FF8C00"
+        - name: bordersize
+          in: query
+          required: false
+          description: Border thickness in pixels (0-10)
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          example: 3
+        - name: fontsize
+          in: query
+          required: false
+          description: Font size in points (6-72)
+          schema:
+            type: integer
+            minimum: 6
+            maximum: 72
+            default: 10
+          example: 12
+      responses:
+        '200':
+          description: Star icon PNG
+          headers:
+            X-Cache-Status:
+              schema:
+                type: string
+                enum: [HIT, MISS]
+            X-Icon-Type:
+              schema:
+                type: string
+                example: star
+            ETag:
+              schema:
+                type: string
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /sta2.php:
+    get:
+      operationId: sta2Redirect
+      summary: "[DEPRECATED] Redirects to square.php"
+      description: |
+        **DEPRECATED**: This endpoint is deprecated and will be removed in v3.0.
+
+        Use `/square.php` instead.
+
+        This endpoint performs an HTTP 301 Permanent Redirect to `square.php`.
+      deprecated: true
+      tags:
+        - deprecated
+      parameters:
+        - name: label
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: labelcolor
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: bgcolor
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: dbstatuscolor
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '301':
+          description: Permanent redirect to square.php
+          headers:
+            Location:
+              schema:
+                type: string
+                example: square.php?label=ST&...
+            X-Deprecated-Endpoint:
+              schema:
+                type: string
+                example: sta2.php
+            X-Preferred-Endpoint:
+              schema:
+                type: string
+                example: square.php
+
+  /event1.php:
+    get:
+      operationId: event1Redirect
+      summary: "[DEPRECATED] Redirects to circle.php"
+      description: |
+        **DEPRECATED**: This endpoint is deprecated and will be removed in v3.0.
+
+        Use `/circle.php` instead.
+
+        This endpoint performs an HTTP 301 Permanent Redirect to `circle.php`.
+      deprecated: true
+      tags:
+        - deprecated
+      parameters:
+        - name: xsize
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: ysize
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: bgcolor
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: label
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: textcolor
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '301':
+          description: Permanent redirect to circle.php
+          headers:
+            Location:
+              schema:
+                type: string
+                example: circle.php?xsize=60&...
+            X-Deprecated-Endpoint:
+              schema:
+                type: string
+                example: event1.php
+            X-Preferred-Endpoint:
+              schema:
+                type: string
+                example: circle.php
+
+  /icon.php:
+    get:
+      operationId: legacyRouter
+      summary: "[LEGACY] Backward compatibility router"
+      description: |
+        **LEGACY**: This endpoint is maintained for backward compatibility only.
+
+        New code should use direct endpoints: `square.php`, `circle.php`, `triangle.php`, `pentagon.php`, `hexagon.php`, `star.php`.
+
+        This endpoint performs an HTTP 302 redirect based on the `type` parameter.
+      deprecated: true
+      tags:
+        - deprecated
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: Icon type (routes to appropriate endpoint)
+          schema:
+            type: string
+            enum: [square, sta2, circle, event1, triangle, pentagon, hexagon, star]
+          example: square
+      responses:
+        '302':
+          description: Temporary redirect to appropriate endpoint
+          headers:
+            Location:
+              schema:
+                type: string
+                example: square.php?label=ST&...
+            X-Legacy-Router:
+              schema:
+                type: string
+                example: icon.php
+            X-Routed-To:
+              schema:
+                type: string
+                example: square.php
+
+  /health.php:
+    get:
+      operationId: healthCheck
+      summary: Health check endpoint
+      description: Returns the health status of the service and its dependencies
+      tags:
+        - monitoring
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: "healthy"
+                timestamp: "2025-11-29T10:30:00Z"
+                version: "1.0.0"
+                checks:
+                  icons_directory_writable: true
+                  gd_library: true
+                  fonts_available: true
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: "unhealthy"
+                timestamp: "2025-11-29T10:30:00Z"
+                version: "1.0.0"
+                checks:
+                  icons_directory_writable: false
+                  gd_library: true
+                  fonts_available: true
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+        - code
+        - message
+      properties:
+        error:
+          type: boolean
+          example: true
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Invalid parameters"
+        validation_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              parameter:
+                type: string
+              message:
+                type: string
+              expected:
+                type: string
+              value:
+                type: string
+        request:
+          type: string
+          example: "http://localhost:8999/square.php?..."
+        timestamp:
+          type: string
+          example: "2025-11-29T10:30:00 UTC"
+        service_version:
+          type: string
+          example: "ws-icon: v2.0.0"
+
+    Health:
+      type: object
+      required:
+        - status
+        - timestamp
+        - checks
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+        checks:
+          type: object
+          properties:
+            icons_directory_writable:
+              type: boolean
+            gd_library:
+              type: boolean
+            fonts_available:
+              type: boolean
