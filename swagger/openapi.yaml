@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: INGV Icon Generation API
+  title: WS-Icon Generation API
   description: |
     Dynamic icon generation service that creates PNG icons with customizable colors, labels, and borders.
 
@@ -33,14 +33,12 @@ info:
     - `Cache-Control`: Aggressive caching (1 year immutable)
   version: 1.3.0
   contact:
-    name: INGV Support
-    email: valentino.lauciani@ingv.it
+    name: Support
+    email: vlauciani@gmail.com
 
 servers:
   - url: http://localhost:8999
     description: Local development server
-  - url: http://webservices.ingv.it/icon
-    description: Production server (example)
 
 tags:
   - name: icons

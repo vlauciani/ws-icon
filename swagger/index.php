@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INGV Icon API Documentation</title>
+    <title>WS-Icon API Documentation</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.0/swagger-ui.css">
     <style>
         html {
@@ -11,21 +12,28 @@
             overflow: -moz-scrollbars-vertical;
             overflow-y: scroll;
         }
-        *, *:before, *:after {
+
+        *,
+        *:before,
+        *:after {
             box-sizing: inherit;
         }
+
         body {
             margin: 0;
             padding: 0;
         }
+
         .topbar {
             background-color: #1b1b1b !important;
         }
+
         .swagger-ui .topbar .download-url-wrapper {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <div id="swagger-ui"></div>
 
@@ -58,4 +66,5 @@
         };
     </script>
 </body>
+
 </html>
