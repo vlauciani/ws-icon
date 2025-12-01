@@ -30,14 +30,14 @@ docker run -d --rm -p 8999:80 --name ws-icon vlauciani/ws-icon:latest
 
 ## Supported Icon Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `circle` | Circular icons | [Try it](http://localhost:8999/icon.php?type=circle&xsize=60&ysize=60&bgcolor=0000FF&label=C1&textcolor=FFFFFF) |
-| `square` | Square icons with border | [Try it](http://localhost:8999/icon.php?type=square&label=ST&labelcolor=FFFFFF&bgcolor=FF0000&dbstatuscolor=00FF00) |
-| `triangle` | Triangular icons | [Try it](http://localhost:8999/icon.php?type=triangle&bgcolor=FF0000&label=T1&labelcolor=FFFFFF&bordercolor=000000&fontsize=10) |
-| `pentagon` | Pentagon icons | [Try it](http://localhost:8999/icon.php?type=pentagon&bgcolor=FFA500&label=P1&labelcolor=FFFFFF&bordercolor=000000&fontsize=12) |
-| `hexagon` | Hexagon icons | [Try it](http://localhost:8999/icon.php?type=hexagon&bgcolor=800080&label=H1&labelcolor=FFFFFF&bordercolor=000000&fontsize=12) |
-| `star` | 5-pointed star icons | [Try it](http://localhost:8999/icon.php?type=star&bgcolor=FFD700&label=S1&labelcolor=000000&bordercolor=FF8C00&fontsize=12) |
+| Type | Description |
+|------|-------------|
+| `circle` | Circular icons |
+| `square` | Square icons with border |
+| `triangle` | Triangular icons |
+| `pentagon` | Pentagon icons |
+| `hexagon` | Hexagon icons |
+| `star` | 5-pointed star icons |
 
 ## Environment Variables
 
