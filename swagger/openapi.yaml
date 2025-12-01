@@ -31,7 +31,7 @@ info:
     - `X-Icon-Type`: The canonical type name
     - `ETag`: MD5 hash for caching validation
     - `Cache-Control`: Aggressive caching (1 year immutable)
-  version: 1.3.0
+  version: 1.3.1
   contact:
     name: INGV Support
     email: valentino.lauciani@ingv.it
