@@ -26,7 +26,7 @@ info:
     - `X-Icon-Type`: The canonical type name
     - `ETag`: MD5 hash for caching validation
     - `Cache-Control`: Aggressive caching (1 year immutable)
-  version: 1.5.0
+  version: 1.6.0
   contact:
     name: Support
     email: vlauciani@gmail.com
