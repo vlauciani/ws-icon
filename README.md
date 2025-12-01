@@ -57,19 +57,19 @@ docker run -d --rm -p 8999:80 \
   vlauciani/ws-icon:latest
 ```
 
-If you set LOG_ENABLED=true and LOG_TO_STDOUT=false and you want to view your log files outside the container, create ingv_ws_icon_log directory with full permissions:
+If you set `LOG_ENABLED=true` and `LOG_TO_STDOUT=false` and you want to view your log files outside the container, create `log` directory with full permissions:
 
 ```bash
-mkdir /tmp/ingv_ws_icon_log
-chmod 777 /tmp/ingv_ws_icon_log/
+mkdir /tmp/log
+chmod 777 /tmp/log/
 ```
-and mount it with: `-v /tmp/ingv_ws_icon_log:/tmp/log`. Example:
+and mount it with: `-v /tmp/log:/tmp/log`. Example:
 
 ```bash
 docker run -d --rm -p 8999:80 \
     -e LOG_ENABLED=true \
     -e LOG_TO_STDOUT=false \
-    -v /tmp/ingv_ws_icon_log:/tmp/log \
+    -v /tmp/log:/tmp/log \
     vlauciani/ws-icon:latest
 ```
 
