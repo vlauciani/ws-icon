@@ -43,9 +43,9 @@ function isValidHexColor($color) {
 
 function sendEmail($subject, $message)
 {
-    $to      = 'valentino.lauciani@ingv.it';
-    $headers = 'From: valentino.lauciani@ingv.it' . "\r\n" .
-        'Reply-To: valentino.lauciani@ingv.it' . "\r\n" .
+    $to      = 'vlauciani@gmail.com';
+    $headers = 'From: vlauciani@gmail.com' . "\r\n" .
+        'Reply-To: vlauciani@gmail.com' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
 
     mail($to, $subject, $message, $headers);
@@ -322,7 +322,7 @@ function reportErrorAndExit($arrayError, $writeStringToFile = "y")
     $message .= "Request: " . $request . "\n";
     $message .= "Request Submitted: " . $requestSubmitted . "\n";
     $message .= "Service version: " . $serviceVersion;
-    sendEmail($subject, $message);
+    //sendEmail($subject, $message);
 
     if ($writeStringToFile == "y") {
         write_string_to_file(LOG_FILE, "END: ---------- icon ----------");
