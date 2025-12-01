@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  ws-icon:
+    image: vlauciani/ws-icon:latest
+
+    ports:
+      - "8999:80"
+
+    environment:
+      - LOG_ENABLED=true
+      - LOG_TO_STDOUT=true
+
+    networks:
+      - ws-icon-network
+
+    deploy:
+      replicas: 2
+
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        order: start-first
+
+      rollback_config:
+        parallelism: 1
+        delay: 5s
+
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1/health.php"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # Uncomment if you need persistent log storage
+    # volumes:
+    #   - ws-icon-logs:/tmp/log
+
+networks:
+  ws-icon-network:
+    driver: overlay
+    attachable: true
+
+# Uncomment if you need persistent volumes
+# volumes:
+#   ws-icon-logs:
+#     driver: local
