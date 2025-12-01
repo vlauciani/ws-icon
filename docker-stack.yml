@@ -5,7 +5,7 @@ services:
     image: vlauciani/ws-icon:${DOCKER_IMAGE_TAG:-latest}
 
     ports:
-      - "${HTTP_PORT:-8280}:80"
+      - "${HTTP_PORT:-8880}:80"
 
     environment:
       - LOG_ENABLED=true
