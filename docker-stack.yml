@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   ws-icon:
-    image: vlauciani/ws-icon:latest
+    image: vlauciani/ws-icon:${DOCKER_IMAGE_TAG:-latest}
 
     ports:
-      - "8999:80"
+      - "${HTTP_PORT:-8280}:80"
 
     environment:
       - LOG_ENABLED=true
