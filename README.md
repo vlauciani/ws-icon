@@ -1,3 +1,13 @@
+[![License](https://img.shields.io/github/license/vlauciani/ws-icon.svg)](https://github.com/vlauciani/ws-icon/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/vlauciani/ws-icon.svg)](https://github.com/vlauciani/ws-icon/issues)
+
+[![Docker build](https://img.shields.io/badge/docker%20build-from%20CI-yellow)](https://hub.docker.com/r/vlauciani/ws-icon)
+![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/vlauciani/ws-icon?sort=semver)
+![Docker Pulls](https://img.shields.io/docker/pulls/vlauciani/ws-icon)
+
+[![CI](https://github.com/vlauciani/ws-icon/actions/workflows/docker-image.yml/badge.svg)](https://github.com/vlauciani/ws-icon/actions)
+[![GitHub](https://img.shields.io/static/v1?label=GitHub&message=Link%20to%20repository&color=blueviolet)](https://github.com/vlauciani/ws-icon)
+
 # ws-icon
 
 Docker container per far partire un servizio per generare le icone.
@@ -196,3 +206,14 @@ cd ws-icon
 docker build -t vlauciani/ws-icon:latest .
 docker run --rm -p 8999:80 -e LOG_ENABLED=true -e LOG_TO_STDOUT=true --name ws-icon__container -v $(pwd)/log:/tmp/log -v $(pwd):/app vlauciani/ws-icon:latest
 ```
+
+# Contribute
+Thanks to your contributions!
+
+Here is a list of users who already contributed to this repository: \
+<a href="https://github.com/vlauciani/ws-icon/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vlauciani/ws-icon" />
+</a>
+
+# Author
+(c) 2025 Valentino Lauciani vlauciani[at]gmail.com
