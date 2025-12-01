@@ -17,7 +17,8 @@ env:
   DOCKER_IMAGE: vlauciani/ws-icon
 
 jobs:
-  build-and-push:
+  version-check:
+    name: Version Consistency Check
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +42,15 @@ jobs:
           fi
 
           echo "::notice::Version check passed: $VERSION_FILE"
+
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: version-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
