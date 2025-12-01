@@ -18,7 +18,8 @@ docker run -d --rm -p 8999:80 --name ws-icon vlauciani/ws-icon:latest
 Access the service at:
 - **API Documentation:** http://localhost:8999/
 - **Health Check:** http://localhost:8999/health.php
-- **Example:** http://localhost:8999/icon.php?type=circle&xsize=120&ysize=120&bgcolor=FF0000&label=C1&textcolor=FFFFFF
+- **Example (Circle):** http://localhost:8999/circle.php?xsize=60&ysize=60&bgcolor=FF0000&label=C1&textcolor=FFFFFF
+- **Example (Square):** http://localhost:8999/square.php?label=ST&labelcolor=FFFFFF&bgcolor=0000FF&dbstatuscolor=00FF00
 
 ### Build Yourself
 ```bash
