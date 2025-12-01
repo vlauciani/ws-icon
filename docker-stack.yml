@@ -15,7 +15,7 @@ services:
       - ws-icon-network
 
     deploy:
-      replicas: 2
+      replicas: 1
 
       update_config:
         parallelism: 1
