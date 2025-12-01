@@ -56,6 +56,22 @@ docker run -d --rm -p 8999:80 \
   vlauciani/ws-icon:latest
 ```
 
+If you set LOG_ENABLED=true and LOG_TO_STDOUT=false and you want to view your log files outside the container, create ingv_ws_icon_log directory with full permissions:
+
+```bash
+mkdir /tmp/ingv_ws_icon_log
+chmod 777 /tmp/ingv_ws_icon_log/
+```
+and mount it with: `-v /tmp/ingv_ws_icon_log:/tmp/log`. Example:
+
+```bash
+docker run -d --rm -p 8999:80 \
+    -e LOG_ENABLED=true \
+    -e LOG_TO_STDOUT=false \
+    -v /tmp/ingv_ws_icon_log:/tmp/log \
+    vlauciani/ws-icon:latest
+```
+
 ## Key Features
 
 - **Multi-shape support:** Circle, square, triangle, pentagon, hexagon, star
@@ -82,6 +98,7 @@ docker run --rm -p 8999:80 \
   -e LOG_ENABLED=true \
   -e LOG_TO_STDOUT=true \
   -v $(pwd):/app \
+  -v $(pwd)/log:/tmp/log \
   --name ws-icon \
   vlauciani/ws-icon:latest
 ```
