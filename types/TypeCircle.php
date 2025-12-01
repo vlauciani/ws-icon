@@ -62,14 +62,8 @@ function validateCircleParams($params) {
         ];
     }
 
-    // Required: label
-    if (!isset($params['label'])) {
-        $errors[] = [
-            'parameter' => 'label',
-            'message' => 'Parameter "label" is required',
-            'expected' => 'string (1-10 characters)'
-        ];
-    } elseif (strlen($params['label']) > 10) {
+    // Optional: label (validate length if provided)
+    if (isset($params['label']) && !empty($params['label']) && strlen($params['label']) > 10) {
         $errors[] = [
             'parameter' => 'label',
             'message' => 'Parameter "label" is too long',
@@ -78,14 +72,8 @@ function validateCircleParams($params) {
         ];
     }
 
-    // Required: textcolor
-    if (!isset($params['textcolor'])) {
-        $errors[] = [
-            'parameter' => 'textcolor',
-            'message' => 'Parameter "textcolor" is required',
-            'expected' => '6-digit hexadecimal color (e.g., 000000)'
-        ];
-    } elseif (!isValidHexColor($params['textcolor'])) {
+    // Optional: textcolor (validate if provided)
+    if (isset($params['textcolor']) && !isValidHexColor($params['textcolor'])) {
         $errors[] = [
             'parameter' => 'textcolor',
             'message' => 'Invalid hex color format',
@@ -115,8 +103,8 @@ function getCircleFilename($params) {
     $xSize = intval($params['xsize']);
     $ySize = intval($params['ysize']);
     $bgColor = $params['bgcolor'];
-    $label = $params['label'];
-    $textColor = $params['textcolor'];
+    $label = isset($params['label']) && !empty($params['label']) ? $params['label'] : 'EMPTY';
+    $textColor = isset($params['textcolor']) ? $params['textcolor'] : '000000';
     $fontSize = isset($params['fontsize']) ? intval($params['fontsize']) : DEFAULT_FONTSIZE;
 
     return "circle__xsize-{$xSize}__ysize-{$ySize}__bgcolor-{$bgColor}__label-{$label}__textcolor-{$textColor}__fontsize-{$fontSize}.png";
@@ -125,7 +113,7 @@ function getCircleFilename($params) {
 // Generate circle icon
 function generateCircleIcon($params) {
     $bgColor = $params['bgcolor'];
-    $labelColor = $params['textcolor'];
+    $labelColor = isset($params['textcolor']) ? $params['textcolor'] : '000000';
     $radius = intval($params['xsize']);
     $fontSize = isset($params['fontsize']) ? intval($params['fontsize']) : DEFAULT_FONTSIZE;
 
@@ -140,8 +128,8 @@ function generateCircleIcon($params) {
         'b' => $bgColorRGB[2]
     ]);
 
-    // Add label text
-    if (isset($params['label'])) {
+    // Add label text (only if label is provided and not empty)
+    if (isset($params['label']) && !empty($params['label'])) {
         $label = $params['label'];
         addText($image, $label, $fontSize, [
             'r' => $labelColorRGB[0],

@@ -23,14 +23,8 @@ function validateHexagonParams($params) {
         ];
     }
 
-    // Required: label
-    if (!isset($params['label'])) {
-        $errors[] = [
-            'parameter' => 'label',
-            'message' => 'Parameter "label" is required',
-            'expected' => 'string (1-10 characters)'
-        ];
-    } elseif (strlen($params['label']) > 10) {
+    // Optional: label (validate length if provided)
+    if (isset($params['label']) && !empty($params['label']) && strlen($params['label']) > 10) {
         $errors[] = [
             'parameter' => 'label',
             'message' => 'Parameter "label" is too long',
@@ -39,14 +33,8 @@ function validateHexagonParams($params) {
         ];
     }
 
-    // Required: labelcolor
-    if (!isset($params['labelcolor']) || $params['labelcolor'] === 'undefined') {
-        $errors[] = [
-            'parameter' => 'labelcolor',
-            'message' => 'Parameter "labelcolor" is required',
-            'expected' => '6-digit hexadecimal color (e.g., FFFFFF)'
-        ];
-    } elseif (!isValidHexColor($params['labelcolor'])) {
+    // Optional: labelcolor (validate if provided)
+    if (isset($params['labelcolor']) && $params['labelcolor'] !== 'undefined' && !isValidHexColor($params['labelcolor'])) {
         $errors[] = [
             'parameter' => 'labelcolor',
             'message' => 'Invalid hex color format',
@@ -103,7 +91,7 @@ function validateHexagonParams($params) {
 // Generate filename based on parameters
 function getHexagonFilename($params) {
     $bgColor = isset($params['bgcolor']) && $params['bgcolor'] !== 'undefined' ? $params['bgcolor'] : 'FFFFFF';
-    $label = $params['label'];
+    $label = isset($params['label']) && !empty($params['label']) ? $params['label'] : 'EMPTY';
     $labelColor = isset($params['labelcolor']) && $params['labelcolor'] !== 'undefined' ? $params['labelcolor'] : '000000';
     $borderColor = isset($params['bordercolor']) && $params['bordercolor'] !== 'undefined' ? $params['bordercolor'] : '000000';
     $borderSize = isset($params['bordersize']) ? intval($params['bordersize']) : 3;
@@ -142,8 +130,8 @@ function generateHexagonIcon($params) {
         ]
     );
 
-    // Add label text
-    if (isset($params['label'])) {
+    // Add label text (only if label is provided and not empty)
+    if (isset($params['label']) && !empty($params['label'])) {
         $label = $params['label'];
         addText($image, $label, $fontSize, [
             'r' => $labelColorRGB[0],

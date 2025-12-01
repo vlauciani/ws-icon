@@ -20,18 +20,13 @@ info:
     - `/hexagon.php?label=H1&...` - Hexagon icons
     - `/star.php?label=S1&...` - Star icons (5-pointed)
 
-    **Deprecated (Backward Compatible)**:
-    - `/icon.php?type=square&...` - Redirects to square.php
-    - `/sta2.php?...` - HTTP 301 redirect to square.php
-    - `/event1.php?...` - HTTP 301 redirect to circle.php
-
     ## Response Headers
     All successful icon responses include:
     - `X-Cache-Status`: `HIT` or `MISS` indicating cache usage
     - `X-Icon-Type`: The canonical type name
     - `ETag`: MD5 hash for caching validation
     - `Cache-Control`: Aggressive caching (1 year immutable)
-  version: 1.4.0
+  version: 1.5.0
   contact:
     name: Support
     email: vlauciani@gmail.com
@@ -57,15 +52,15 @@ paths:
       parameters:
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "ST"
         - name: labelcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for label text (6 digits, no #)
           schema:
             type: string
@@ -170,15 +165,15 @@ paths:
           example: "0000FF"
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "C1"
         - name: textcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for text (6 digits, no #)
           schema:
             type: string
@@ -239,15 +234,15 @@ paths:
           example: "FF0000"
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "T1"
         - name: labelcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for label text (6 digits, no #)
           schema:
             type: string
@@ -326,15 +321,15 @@ paths:
           example: "FFA500"
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "P1"
         - name: labelcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for label text (6 digits, no #)
           schema:
             type: string
@@ -413,15 +408,15 @@ paths:
           example: "800080"
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "H1"
         - name: labelcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for label text (6 digits, no #)
           schema:
             type: string
@@ -500,15 +495,15 @@ paths:
           example: "FFD700"
         - name: label
           in: query
-          required: true
-          description: Text label to display (1-10 characters)
+          required: false
+          description: Text label to display (1-10 characters). If not provided, icon will be generated without label.
           schema:
             type: string
             maxLength: 10
           example: "S1"
         - name: labelcolor
           in: query
-          required: true
+          required: false
           description: Hex color code for label text (6 digits, no #)
           schema:
             type: string

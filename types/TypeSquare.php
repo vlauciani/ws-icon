@@ -8,14 +8,8 @@
 function validateSquareParams($params) {
     $errors = [];
 
-    // Required: label
-    if (!isset($params['label'])) {
-        $errors[] = [
-            'parameter' => 'label',
-            'message' => 'Parameter "label" is required',
-            'expected' => 'string (1-10 characters)'
-        ];
-    } elseif (strlen($params['label']) > 10) {
+    // Optional: label (validate length if provided)
+    if (isset($params['label']) && !empty($params['label']) && strlen($params['label']) > 10) {
         $errors[] = [
             'parameter' => 'label',
             'message' => 'Parameter "label" is too long',
@@ -24,14 +18,8 @@ function validateSquareParams($params) {
         ];
     }
 
-    // Required: labelcolor
-    if (!isset($params['labelcolor'])) {
-        $errors[] = [
-            'parameter' => 'labelcolor',
-            'message' => 'Parameter "labelcolor" is required',
-            'expected' => '6-digit hexadecimal color (e.g., FF0000)'
-        ];
-    } elseif (!isValidHexColor($params['labelcolor'])) {
+    // Optional: labelcolor (validate if provided)
+    if (isset($params['labelcolor']) && !isValidHexColor($params['labelcolor'])) {
         $errors[] = [
             'parameter' => 'labelcolor',
             'message' => 'Invalid hex color format',
@@ -103,7 +91,7 @@ function validateSquareParams($params) {
 
 // Generate filename based on parameters
 function getSquareFilename($params) {
-    $label = $params['label'];
+    $label = isset($params['label']) && !empty($params['label']) ? $params['label'] : 'EMPTY';
     $bgColor = isset($params['bgcolor']) && $params['bgcolor'] !== 'undefined' ? $params['bgcolor'] : 'FFFFFF';
     $labelColor = isset($params['labelcolor']) && $params['labelcolor'] !== 'undefined' ? $params['labelcolor'] : '000000';
     $dbStatusColor = isset($params['dbstatuscolor']) && $params['dbstatuscolor'] !== 'undefined' ? $params['dbstatuscolor'] : '000000';
@@ -151,8 +139,8 @@ function generateSquareIcon($params) {
     );
     imagecopy($image, $square, 0, 0, 0, 0, $width, $height);
 
-    // Add label text
-    if (isset($params['label'])) {
+    // Add label text (only if label is provided and not empty)
+    if (isset($params['label']) && !empty($params['label'])) {
         $label = $params['label'];
         addText($image, $label, $fontSize, [
             'r' => $labelColorRGB[0],
