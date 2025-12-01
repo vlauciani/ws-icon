@@ -44,19 +44,19 @@ function validateSquareParams($params) {
         ];
     }
 
-    // Required: dbstatuscolor
-    if (!isset($params['dbstatuscolor']) || $params['dbstatuscolor'] === 'undefined') {
+    // Required: bordercolor
+    if (!isset($params['bordercolor']) || $params['bordercolor'] === 'undefined') {
         $errors[] = [
-            'parameter' => 'dbstatuscolor',
-            'message' => 'Parameter "dbstatuscolor" is required',
+            'parameter' => 'bordercolor',
+            'message' => 'Parameter "bordercolor" is required',
             'expected' => '6-digit hexadecimal color (e.g., 00FF00)'
         ];
-    } elseif (!isValidHexColor($params['dbstatuscolor'])) {
+    } elseif (!isValidHexColor($params['bordercolor'])) {
         $errors[] = [
-            'parameter' => 'dbstatuscolor',
+            'parameter' => 'bordercolor',
             'message' => 'Invalid hex color format',
             'expected' => '6-digit hexadecimal color (e.g., 00FF00)',
-            'value' => $params['dbstatuscolor']
+            'value' => $params['bordercolor']
         ];
     }
 
@@ -94,11 +94,11 @@ function getSquareFilename($params) {
     $label = isset($params['label']) && !empty($params['label']) ? $params['label'] : 'EMPTY';
     $bgColor = isset($params['bgcolor']) && $params['bgcolor'] !== 'undefined' ? $params['bgcolor'] : 'FFFFFF';
     $labelColor = isset($params['labelcolor']) && $params['labelcolor'] !== 'undefined' ? $params['labelcolor'] : '000000';
-    $dbStatusColor = isset($params['dbstatuscolor']) && $params['dbstatuscolor'] !== 'undefined' ? $params['dbstatuscolor'] : '000000';
+    $borderColor = isset($params['bordercolor']) && $params['bordercolor'] !== 'undefined' ? $params['bordercolor'] : '000000';
     $borderSize = isset($params['bordersize']) ? intval($params['bordersize']) : 3;
     $fontSize = isset($params['fontsize']) ? intval($params['fontsize']) : DEFAULT_FONTSIZE;
 
-    return "square__label-{$label}__bgcolor-{$bgColor}__labelcolor-{$labelColor}__dbstatuscolor-{$dbStatusColor}__bordersize-{$borderSize}__fontsize-{$fontSize}.png";
+    return "square__label-{$label}__bgcolor-{$bgColor}__labelcolor-{$labelColor}__bordercolor-{$borderColor}__bordersize-{$borderSize}__fontsize-{$fontSize}.png";
 }
 
 // Generate square icon
@@ -108,14 +108,14 @@ function generateSquareIcon($params) {
 
     $bgColor = isset($params['bgcolor']) && $params['bgcolor'] !== 'undefined' ? $params['bgcolor'] : 'FFFFFF';
     $labelColor = isset($params['labelcolor']) && $params['labelcolor'] !== 'undefined' ? $params['labelcolor'] : '000000';
-    $dbStatusColor = isset($params['dbstatuscolor']) && $params['dbstatuscolor'] !== 'undefined' ? $params['dbstatuscolor'] : '000000';
+    $borderColor = isset($params['bordercolor']) && $params['bordercolor'] !== 'undefined' ? $params['bordercolor'] : '000000';
     $borderSize = isset($params['bordersize']) ? intval($params['bordersize']) : 3;
     $fontSize = isset($params['fontsize']) ? intval($params['fontsize']) : DEFAULT_FONTSIZE;
 
     // Convert hex color codes to RGB
     $bgColorRGB = sscanf($bgColor, "%02x%02x%02x");
     $labelColorRGB = sscanf($labelColor, "%02x%02x%02x");
-    $dbStatusColorRGB = sscanf($dbStatusColor, "%02x%02x%02x");
+    $borderColorRGB = sscanf($borderColor, "%02x%02x%02x");
 
     // Create image
     $image = imagecreatetruecolor($width, $height);
@@ -132,9 +132,9 @@ function generateSquareIcon($params) {
         ],
         $borderSize,
         [
-            'r' => $dbStatusColorRGB[0],
-            'g' => $dbStatusColorRGB[1],
-            'b' => $dbStatusColorRGB[2]
+            'r' => $borderColorRGB[0],
+            'g' => $borderColorRGB[1],
+            'b' => $borderColorRGB[2]
         ]
     );
     imagecopy($image, $square, 0, 0, 0, 0, $width, $height);

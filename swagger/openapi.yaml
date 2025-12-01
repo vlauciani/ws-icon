@@ -46,10 +46,18 @@ paths:
     get:
       operationId: generateSquareIcon
       summary: Generate a square icon
-      description: Generates a square icon with customizable background color, label, label color, and border (database status) color.
+      description: Generates a square icon with customizable background color, label, label color, and border color.
       tags:
         - icons
       parameters:
+        - name: bgcolor
+          in: query
+          required: true
+          description: Hex color code for background (6 digits, no #)
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+          example: "FF0000"
         - name: label
           in: query
           required: false
@@ -66,15 +74,7 @@ paths:
             type: string
             pattern: '^[0-9A-Fa-f]{6}$'
           example: "FFFFFF"
-        - name: bgcolor
-          in: query
-          required: true
-          description: Hex color code for background (6 digits, no #)
-          schema:
-            type: string
-            pattern: '^[0-9A-Fa-f]{6}$'
-          example: "FF0000"
-        - name: dbstatuscolor
+        - name: bordercolor
           in: query
           required: true
           description: Hex color code for border (6 digits, no #)
