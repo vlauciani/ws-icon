@@ -16,7 +16,7 @@ docker run -d --rm -p 8999:80 --name ws-icon vlauciani/ws-icon:latest
 ```
 
 Access the service at:
-- **API Documentation:** http://localhost:8999/swagger/
+- **API Documentation:** http://localhost:8999/
 - **Health Check:** http://localhost:8999/health.php
 - **Example:** http://localhost:8999/icon.php?type=circle&xsize=120&ysize=120&bgcolor=FF0000&label=C1&textcolor=FFFFFF
 
@@ -88,7 +88,9 @@ docker run --rm -p 8999:80 \
 
 ## API Documentation
 
-Full interactive API documentation is available at: **http://localhost:8999/swagger/**
+Full interactive API documentation is available at: **http://localhost:8999/**
+
+The legacy Swagger endpoint is still accessible at: http://localhost:8999/swagger/
 
 ## Contribute
 
